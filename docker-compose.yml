@@ -1,0 +1,15 @@
+services:
+  codex:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dev-setup
+    working_dir: /workspace
+    stdin_open: true
+    tty: true
+    volumes:
+      - "${WORKSPACE_PATH:-C:/Workfolder}:/workspace"
+      - codex_home:/root/.codex
+
+volumes:
+  codex_home:
