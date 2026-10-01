@@ -1,15 +1,37 @@
 services:
+
   codex:
     build:
       context: .
       dockerfile: Dockerfile
+
     container_name: dev-setup
     working_dir: /workspace
     stdin_open: true
     tty: true
+
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+
     volumes:
       - "${WORKSPACE_PATH:-C:/Workfolder}:/workspace"
       - codex_home:/root/.codex
 
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver-docker
+
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD}
+
+    ports:
+      - "1433:1433"
+
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+      - ./sql-backups:/var/opt/mssql/backup
+
 volumes:
   codex_home:
+  sqlserver-data:
